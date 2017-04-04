@@ -980,7 +980,7 @@ pred.rst <- reactive({
 plot.pred <- function(aprst, dat.sub, var.estvar) {
     par(mfrow=c(2,2))
     funs   <- list(median, sd, min, max);
-    titles <- c("Median", "Standard Deviation", "Minimum", "Maximimu");
+    titles <- c("Median", "Standard Deviation", "Minimum", "Maximum");
 
     for (i in 1:length(funs)) {
         cur.sum <- apply(aprst, 2, funs[[i]]);

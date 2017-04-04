@@ -335,7 +335,7 @@ bzPredSubgrp <- function(stan.rst, dat.sub, var.estvar) {
         } else {
             eps <- rnorm(nsub, 0, sqrt(delta))
         }
-        lsig <- log(sigma2) + eps;
+        lsig <- log(sqrt(sigma2)) + eps;
         exp(lsig);
     }
 

@@ -54,7 +54,7 @@ The example is as follows:
 
 ```{r, eval=T, echo=TRUE}
 
-var.cov    <- c("sodium", "lvef", "any.vasodilator.use");
+var.cov    <- c("lvef", "sodium", "any.vasodilator.use");
 var.resp   <- "y";
 var.trt    <- "trt";
 var.censor <- "censor";
@@ -89,7 +89,6 @@ The following examples show how *No subgroup effect model* (*nse),
 
 ```{r, eval=T, echo=TRUE}
 
-var.cov    <- c("sodium", "lvef", "any.vasodilator.use");
 var.estvar <- c("Estimate", "Variance");
 
 rst.nse <- bzCallStan("nse", dat.sub=subgrp.effect,
@@ -205,3 +204,18 @@ print(gs.pval);
 
 The result show that there is no significant qualitative interactions according
 to the Gail-Simon test.
+
+
+     rst.bs  <- bzCallStan(mdls = "bs", dat.sub = subgrp.effect,
+       var.estvar = var.estvar, var.cov = var.cov,
+       par.pri = c(B = 1000, D = 1), chains = 4, 
+       iter = 4000, warmup = 2000, seed = 1000);
+
+     rst.nse <- bzCallStan(mdls = "nse", dat.sub = subgrp.effect,
+       var.estvar = var.estvar, var.cov = var.cov,
+       par.pri = c(B = 1000), chains = 4, 
+       iter = 4000, warmup = 2000, seed = 1000);
+    lst.rst <- list(sr = rst.sr, bs = rst.bs);
+    tbl.summary <- bzRptTbl(lst.rst, dat.sub = subgrp.effect,
+       var.cov = c("lvef", "sodium", "any.vasodilator.use"));
+    print(tbl.summary);
