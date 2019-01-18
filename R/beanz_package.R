@@ -169,7 +169,7 @@
 #'
 #'@section Graphical user interface (GUI):
 #'
-#' This package provides a web-based Shiny GUI. See \code{\link{run.beanz}} for
+#' This package provides a web-based Shiny GUI. See \code{\link{bzShiny}} for
 #' details.
 #'
 #' @references
@@ -179,5 +179,9 @@
 #' 129-143.
 #'
 #' Dixon DO, Simon R (1991). Bayesian subset analysis. Biometrics, 47(3), 871-881.
+#'
+#' Wang C, Louis TA, Henderson NC, Weiss CO, Varadhan R (2018). beanz: An R
+#' Package for Bayesian Analysis of Heterogeneous Treatment Effects with a
+#' Graphical User Interface. Journal of Statistical Software, 85(7), 1-31.
 #'
 NULL

@@ -95,18 +95,18 @@ rst.nse <- bzCallStan("nse", dat.sub=subgrp.effect,
                      var.estvar = var.estvar, var.cov = var.cov,
                      par.pri = c(B=1000),
                      chains=4, iter=4000,
-                     warmup=2000, seed=1000);
+                     warmup=2000, seed=1000, cores=1);
 
 rst.sr  <- bzCallStan("sr", dat.sub=subgrp.effect,
                      var.estvar = var.estvar, var.cov = var.cov,
                      par.pri = c(B=1000, C=1000),
                      chains=4, iter=4000,
-                     warmup=2000,  seed=1000);
+                     warmup=2000,  seed=1000, cores=1);
 
 rst.bs  <- bzCallStan("bs", dat.sub=subgrp.effect,
                      var.estvar = var.estvar, var.cov = var.cov,
                      par.pri = c(B=1000, D=1),
-                     chains=4, iter=4000, warmup=2000,  seed=1000);
+                     chains=4, iter=4000, warmup=2000,  seed=1000, cores=1);
 
 ```
 
@@ -205,17 +205,3 @@ print(gs.pval);
 The result show that there is no significant qualitative interactions according
 to the Gail-Simon test.
 
-
-     rst.bs  <- bzCallStan(mdls = "bs", dat.sub = subgrp.effect,
-       var.estvar = var.estvar, var.cov = var.cov,
-       par.pri = c(B = 1000, D = 1), chains = 4, 
-       iter = 4000, warmup = 2000, seed = 1000);
-
-     rst.nse <- bzCallStan(mdls = "nse", dat.sub = subgrp.effect,
-       var.estvar = var.estvar, var.cov = var.cov,
-       par.pri = c(B = 1000), chains = 4, 
-       iter = 4000, warmup = 2000, seed = 1000);
-    lst.rst <- list(sr = rst.sr, bs = rst.bs);
-    tbl.summary <- bzRptTbl(lst.rst, dat.sub = subgrp.effect,
-       var.cov = c("lvef", "sodium", "any.vasodilator.use"));
-    print(tbl.summary);

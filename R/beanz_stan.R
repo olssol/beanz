@@ -43,8 +43,10 @@
 #'   \item{srs}{\code{B}, \code{C}, \code{D}}
 #' }
 #'
+#' @param chains STAN options. Number of chains.
+#'
 #' @param ... options to call STAN sampling. These options include
-#'     \code{chains}, \code{iter}, \code{warmup}, \code{thin}, \code{algorithm}.
+#'     \code{iter}, \code{warmup}, \code{thin}, \code{algorithm}.
 #'     See \code{rstan::sampling} for details.
 #'
 #' @return A class \code{beanz.stan} list containing
@@ -69,7 +71,7 @@
 #' resptype   <- "survival";
 #' var.estvar <- c("Estimate", "Variance");
 #'
-#' subgrp.effect <- bzGetSubgrp(solvd.sub,
+#' subgrp.effect <- bzGetSubgrpRaw(solvd.sub,
 #'                                   var.resp   = var.resp,
 #'                                   var.trt    = var.trt,
 #'                                   var.cov    = var.cov,
@@ -79,13 +81,14 @@
 #' rst.nse    <- bzCallStan("nse", dat.sub=subgrp.effect,
 #'                          var.estvar = var.estvar, var.cov = var.cov,
 #'                          par.pri = c(B=1000),
-#'                          chains=4, iter=4000,
-#'                          warmup=2000, thin=2, seed=1000);
+#'                          chains=4, iter=600,
+#'                          warmup=200, thin=2, seed=1000);
+#'
 #' rst.sr     <- bzCallStan("sr", dat.sub=subgrp.effect,
 #'                         var.estvar=var.estvar, var.cov = var.cov,
 #'                         par.pri=c(B=1000, C=1000),
-#'                         chains=1, iter=4000,
-#'                         warmup=2000, thin=2, seed=1000)};
+#'                         chains=4, iter=600,
+#'                         warmup=200, thin=2, seed=1000);}
 #' @export
 #'
 #'
@@ -94,10 +97,11 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
                       dat.sub,
                       var.estvar,
                       var.cov,
-                      par.pri=c(B=1000,C=1000,D=1),
+                      par.pri=c(B=1000.0,C=1000.0,D=1.0),
                       var.nom=NULL,
-                      delta = 0,
+                      delta = 0.0,
                       prior.sig=1,
+                      chains=4,
                       ...) {
 
     mdls <- match.arg(mdls);
@@ -110,6 +114,10 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
     if (!all(names(par.pri) %in% c("B","C","D")))
         stop("Prior parameters are not recognized.");
 
+    ##check number of chains
+    if (chains < 2)
+        stop("At least 2 Markov Chains are required in order to check convergence.")
+
     stopifnot(all(par.pri >= 0));
 
     ##check delta
@@ -117,8 +125,6 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
 
     ##check priorsig
     stopifnot(prior.sig %in% c(0,1));
-
-
 
     ##basic data
     lst.basic <- list(SIZE     = nrow(dat.sub),
@@ -136,18 +142,19 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
     names(par.pri) <- toupper(names(par.pri));
 
     ##call stan
-    stan.rst <- sampling(stanmodels[[mdls]],
-                         data=c(lst.basic, vlist, par.pri),
-                         pars=c("uvs", "nvs", "nomega", "nphi"),
-                         include=FALSE,
-                         ...);
+    stan.rst <- rstan::sampling(stanmodels[[mdls]],
+                                data=c(lst.basic, vlist, par.pri),
+                                pars=c("uvs", "nvs", "nomega", "nphi"),
+                                include=FALSE,
+                                chains=chains,
+                                ...);
 
-    smps <- extract(stan.rst, permuted=FALSE);
+    smps <- rstan::extract(stan.rst, permuted=FALSE);
 
     ##diagnositics-DIC
     dic   <- get.dic(dat.sub[,var.estvar[1]], smps);
     ##diagnositics-LOOIC
-    looic <- loo::loo(loo::extract_log_lik(stan.rst));
+    looic <- loo::loo(loo::extract_log_lik(stan.rst), cores = 1);
     ##rhat
     rhat  <- rstan::summary(stan.rst)$summary[,"Rhat"];
 
@@ -193,7 +200,7 @@ stan.model.sr <- function(dat.sub, var.estvar, var.cov, var.nom) {
     dx     <- df.convert(dx, var.nom);
     fml    <- paste("~", paste(var.cov, collapse="+"), sep="");
     des.x  <- model.matrix(formula(fml), dx);
-    X      <- des.x[,-1]; #remove intercept
+    X      <- des.x[,-1, drop = FALSE]; #remove intercept
     NX     <- ncol(X);
 
     vname  <- make.list(environment());
@@ -214,7 +221,7 @@ stan.model.eds <- function(dat.sub, var.estvar, var.cov, var.nom) {
 
     fml    <- paste("~", paste(var.cov, collapse="+"), "^", NTAU, sep="");
     des.x  <- model.matrix(formula(fml), dx);
-    X      <- des.x[,-1]; #remove intercept
+    X      <- des.x[,-1,drop = FALSE]; #remove intercept
     NX     <- ncol(X);
 
     ##use the number of : for the order of interaction

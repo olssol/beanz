@@ -8,7 +8,7 @@ bzRptTbl(lst.stan.rst, dat.sub, var.cov, cut = 0, digits = 3)
 }
 \arguments{
 \item{lst.stan.rst}{list of class \code{beanz.stan} results from
-\code{\link{call.stan}} for different models}
+\code{\link{bzCallStan}} for different models}
 
 \item{dat.sub}{dataset with subgroup treatment effect summary data}
 
@@ -27,4 +27,3 @@ A dataframe with summary statistics of the model selected by DIC
 Compare the DIC from different models and report the summary of treatment effects
 based on the model with the smallest DIC value
 }
-

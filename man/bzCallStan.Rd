@@ -6,7 +6,7 @@
 \usage{
 bzCallStan(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"), dat.sub,
   var.estvar, var.cov, par.pri = c(B = 1000, C = 1000, D = 1),
-  var.nom = NULL, delta = 0, prior.sig = 1, ...)
+  var.nom = NULL, delta = 0, prior.sig = 1, chains = 4, ...)
 }
 \arguments{
 \item{mdls}{name of the Bayesian HTE model. The options are:
@@ -47,8 +47,10 @@ baseline covariates}
 \item{prior.sig}{option for the informative prior on \eqn{\sigma_g}. 0: uniform prior and
 1: log-normal prior}
 
+\item{chains}{STAN options. Number of chains.}
+
 \item{...}{options to call STAN sampling. These options include
-\code{chains}, \code{iter}, \code{warmup}, \code{thin}, \code{algorithm}.
+\code{iter}, \code{warmup}, \code{thin}, \code{algorithm}.
 See \code{rstan::sampling} for details.}
 }
 \value{
@@ -77,7 +79,7 @@ var.censor <- "censor";
 resptype   <- "survival";
 var.estvar <- c("Estimate", "Variance");
 
-subgrp.effect <- bzGetSubgrp(solvd.sub,
+subgrp.effect <- bzGetSubgrpRaw(solvd.sub,
                                   var.resp   = var.resp,
                                   var.trt    = var.trt,
                                   var.cov    = var.cov,
@@ -87,12 +89,12 @@ subgrp.effect <- bzGetSubgrp(solvd.sub,
 rst.nse    <- bzCallStan("nse", dat.sub=subgrp.effect,
                          var.estvar = var.estvar, var.cov = var.cov,
                          par.pri = c(B=1000),
-                         chains=4, iter=4000,
-                         warmup=2000, thin=2, seed=1000);
+                         chains=4, iter=600,
+                         warmup=200, thin=2, seed=1000);
+
 rst.sr     <- bzCallStan("sr", dat.sub=subgrp.effect,
                         var.estvar=var.estvar, var.cov = var.cov,
                         par.pri=c(B=1000, C=1000),
-                        chains=1, iter=4000,
-                        warmup=2000, thin=2, seed=1000)};
+                        chains=4, iter=600,
+                        warmup=200, thin=2, seed=1000);}
 }
-
