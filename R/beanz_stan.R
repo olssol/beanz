@@ -126,6 +126,10 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
     ##check priorsig
     stopifnot(prior.sig %in% c(0,1));
 
+    ##check model and number of covariates
+    if (length(var.cov) < 2 & "eds" == mdls)
+        stop("eds model requires at least two covariates.");
+
     ##basic data
     lst.basic <- list(SIZE     = nrow(dat.sub),
                       Y        = dat.sub[,var.estvar[1]],
