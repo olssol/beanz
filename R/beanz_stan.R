@@ -144,6 +144,15 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
 
     ## prior data
     names(par.pri) <- toupper(names(par.pri));
+    if (!("B" %in% names(par.pri))) {
+        par.pri["B"] <- 1000;
+    }
+    if (!("C" %in% names(par.pri))) {
+        par.pri["C"] <- 1000;
+    }
+    if (!("D" %in% names(par.pri))) {
+        par.pri["D"] <- 1.0;
+    }
 
     ##call stan
     stan.rst <- rstan::sampling(stanmodels[[mdls]],
@@ -223,7 +232,7 @@ stan.model.eds <- function(dat.sub, var.estvar, var.cov, var.nom) {
     dx     <- df.convert(dx, var.nom);
     NTAU   <- ncol(dx);
 
-    fml    <- paste("~", paste(var.cov, collapse="+"), "^", NTAU, sep="");
+    fml    <- paste("~(", paste(var.cov, collapse="+"), ")^", NTAU, sep="");
     des.x  <- model.matrix(formula(fml), dx);
     X      <- des.x[,-1,drop = FALSE]; #remove intercept
     NX     <- ncol(X);
