@@ -15,11 +15,14 @@ data {
 	vector[SIZE]     SIGY;
 	matrix[SIZE, NX] X;
 
-  real<lower=0> B;
   real<lower=0> C;
 	real<lower=0> D;
 	real<lower=0> DELTA;
   int<lower=0, upper=1> PRIORSIG;
+
+  real<lower=0> B;
+  real          MU;
+
 }
 
 parameters {
@@ -48,7 +51,7 @@ transformed parameters{
 
 
 model {
-  b0      ~ normal(0, sqrt(B));
+  b0      ~ normal(MU, sqrt(B));
   bgamma  ~ normal(0, sqrt(C));
   nphi    ~ normal(0,1);
   uvs     ~ uniform(0,1);
@@ -69,6 +72,6 @@ model {
 generated quantities {
   vector[SIZE] log_lik;
   for (i in 1:SIZE) {
-    log_lik[i] = normal_lpdf(Y[i] | mu[i], vs[i]);    
+    log_lik[i] = normal_lpdf(Y[i] | mu[i], vs[i]);
   }
 }

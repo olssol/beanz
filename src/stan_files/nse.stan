@@ -10,9 +10,10 @@ data {
 	int<lower=0>  SIZE;
 	vector[SIZE]  Y;
 	vector[SIZE]  SIGY;
-  real<lower=0> B;
 	real<lower=0> DELTA;
   int<lower=0, upper=1> PRIORSIG;
+  real<lower=0> B;
+  real          MU;
 }
 
 parameters {
@@ -32,7 +33,7 @@ transformed parameters {
 }
 
 model {
-	tau ~ normal(0, sqrt(B));
+	tau ~ normal(MU, sqrt(B));
   uvs ~ uniform(0,1);
   nvs ~ normal(0,1);
   Y   ~ normal(tau, vs);
@@ -47,7 +48,6 @@ generated quantities {
   }
 
   for (i in 1:SIZE) {
-    log_lik[i] = normal_lpdf(Y[i] | mu[i], vs[i]);    
+    log_lik[i] = normal_lpdf(Y[i] | mu[i], vs[i]);
   }
 }
-

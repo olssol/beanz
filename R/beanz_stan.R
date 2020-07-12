@@ -41,6 +41,7 @@
 #'   \item{sr}{\code{B}, \code{C}}
 #'   \item{bs, ds, eds}{\code{B}, \code{D}}
 #'   \item{srs}{\code{B}, \code{C}, \code{D}}
+#'   \item{nse, fs, sr, bs, srs, ds, eds}{\code{MU}}
 #' }
 #'
 #' @param chains STAN options. Number of chains.
@@ -80,7 +81,7 @@
 #'
 #' rst.nse    <- bzCallStan("nse", dat.sub=subgrp.effect,
 #'                          var.estvar = var.estvar, var.cov = var.cov,
-#'                          par.pri = c(B=1000),
+#'                          par.pri = c(B=1000, MU = 0),
 #'                          chains=4, iter=600,
 #'                          warmup=200, thin=2, seed=1000);
 #'
@@ -97,7 +98,7 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
                       dat.sub,
                       var.estvar,
                       var.cov,
-                      par.pri=c(B=1000.0,C=1000.0,D=1.0),
+                      par.pri=c(B = 1000.0, C = 1000.0, D = 1.0, MU = 0),
                       var.nom=NULL,
                       delta = 0.0,
                       prior.sig=1,
@@ -152,6 +153,9 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
     }
     if (!("D" %in% names(par.pri))) {
         par.pri["D"] <- 1.0;
+    }
+    if (!("MU" %in% names(par.pri))) {
+        par.pri["MU"] <- 0;
     }
 
     ##call stan
@@ -312,4 +316,3 @@ get.mdl.name <- function(mdl) {
 
     rst <- ALL.MODELS[which(mdl == STAN.NAME)];
 }
-
