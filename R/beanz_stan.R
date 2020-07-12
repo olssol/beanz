@@ -112,7 +112,7 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
         stop("Variables specified are not in the dataset.");
 
     ##check par.pri
-    if (!all(names(par.pri) %in% c("B","C","D")))
+    if (!all(names(par.pri) %in% c("B","C","D", "MU")))
         stop("Prior parameters are not recognized.");
 
     ##check number of chains
