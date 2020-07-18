@@ -112,20 +112,18 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
         stop("Variables specified are not in the dataset.");
 
     ##check par.pri
-    if (!all(names(par.pri) %in% c("B","C","D", "MU")))
+    if (!all(names(par.pri) %in% c("B", "C", "D", "MU")))
         stop("Prior parameters are not recognized.");
 
     ##check number of chains
     if (chains < 2)
         stop("At least 2 Markov Chains are required in order to check convergence.")
 
-    stopifnot(all(par.pri >= 0));
-
     ##check delta
     stopifnot(delta >= 0);
 
     ##check priorsig
-    stopifnot(prior.sig %in% c(0,1));
+    stopifnot(prior.sig %in% c(0, 1));
 
     ##check model and number of covariates
     if (length(var.cov) < 2 & "eds" == mdls)
@@ -157,6 +155,8 @@ bzCallStan <- function(mdls = c("nse", "fs", "sr", "bs", "srs", "ds", "eds"),
     if (!("MU" %in% names(par.pri))) {
         par.pri["MU"] <- 0;
     }
+
+    stopifnot(all(par.pri[c("B", "C", "D")] >= 0))
 
     ##call stan
     stan.rst <- rstan::sampling(stanmodels[[mdls]],
