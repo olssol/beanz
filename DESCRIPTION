@@ -19,13 +19,11 @@ Description: It is vital to assess the heterogeneity of treatment effects
 Depends: R (>= 3.4.0), Rcpp (>= 0.12.0), methods
 Imports: rstan (>= 2.18.1), rstantools (>= 1.5.0), survival, loo, RcppParallel (>= 5.0.1)
 LinkingTo: StanHeaders (>= 2.18.0), rstan (>= 2.18.1), BH (>= 1.66.0), Rcpp (>= 0.12.0), RcppEigen (>= 0.3.3.3.0), RcppParallel (>= 5.0.1)
-RcppModules: stan_fit4nse_mod,  stan_fit4fs_mod, stan_fit4sr_mod, stan_fit4bs_mod,
-    stan_fit4srs_mod, stan_fit4ds_mod, stan_fit4eds_mod
 LazyData: true
 ByteCompile: true
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Suggests: knitr, shiny, rmarkdown, pander, shinythemes, DT,
     testthat
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
