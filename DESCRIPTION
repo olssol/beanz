@@ -1,6 +1,6 @@
 Package: beanz
 Title: Bayesian Analysis of Heterogeneous Treatment Effect
-Version: 3.0
+Version: 3.1
 Author: Chenguang Wang [aut, cre],
     Ravi Varadhan [aut],
     Trustees of Columbia University [cph] (tools/make_cpp.R, R/stanmodels.R)
@@ -18,7 +18,7 @@ Description: It is vital to assess the heterogeneity of treatment effects
     (2018) <DOI:10.18637/jss.v085.i07> for further details.
 Depends: R (>= 3.4.0), Rcpp (>= 0.12.0), methods
 Imports: rstan (>= 2.18.1), rstantools (>= 1.5.0), survival, loo, RcppParallel (>= 5.0.1)
-LinkingTo: StanHeaders (>= 2.18.0), rstan (>= 2.18.1), BH (>= 1.66.0), Rcpp (>= 0.12.0), RcppEigen (>= 0.3.3.3.0), RcppParallel (>= 5.0.1)
+LinkingTo: StanHeaders (>= 2.18.0), rstan (>= 2.18.1), BH (>= 1.66.0), Rcpp (>= 0.12.0), RcppEigen (>= 0.3.3.3.0)
 LazyData: true
 ByteCompile: true
 SystemRequirements: GNU make
