@@ -18,7 +18,7 @@ data {
   vector[SIZE]     Y;
 	vector[SIZE]     SIGY;
   matrix[SIZE, NX] X;
-  int<lower=0>     TAUINX[NX];
+  array[NX] int<lower=0>     TAUINX;
 
 	real<lower=0> D;
 	real<lower=0> DELTA;
@@ -31,7 +31,7 @@ data {
 
 parameters {
   real b0;
-  real<lower=0> omega[NTAU];
+  array[NTAU] real<lower=0> omega;
   vector<lower=0, upper=1>[SIZE] uvs;
 	vector[SIZE] nvs;
   vector[NX] nomega;
