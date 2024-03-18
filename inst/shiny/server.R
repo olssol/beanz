@@ -1,3 +1,7 @@
+require(shinythemes)
+require(beanz)
+require(shinydashboard)
+
 shinyServer(function(input, output, session) {
 
     userLog                  <- reactiveValues();
@@ -393,7 +397,15 @@ shinyServer(function(input, output, session) {
                         },
                         rownames=NULL,
                         selection="none",
-                        options=list(paging=FALSE)
+                        extensions = 'Buttons', options = list(
+                          paging = TRUE,
+                          searching = TRUE,
+                          fixedColumns = TRUE,
+                          autoWidth = TRUE,
+                          ordering = TRUE,
+                          dom = 'tB',
+                          buttons = c('copy', 'csv', 'excel')
+                        )
                     );
 
                     ##----comparison
@@ -415,7 +427,15 @@ shinyServer(function(input, output, session) {
                         },
                         rownames=NULL,
                         selection="none",
-                        options=list(paging=FALSE)
+                        extensions = 'Buttons', options = list(
+                          paging = TRUE,
+                          searching = TRUE,
+                          fixedColumns = TRUE,
+                          autoWidth = TRUE,
+                          ordering = TRUE,
+                          dom = 'tB',
+                          buttons = c('copy', 'csv', 'excel')
+                        )
                     );
 
                     ##------stan
@@ -639,7 +659,15 @@ shinyServer(function(input, output, session) {
         disp.digit <- input$displaydigit;
         sub.cov    <- get.sub.cov();
         rst        <- bzRptTbl(arst, dat, sub.cov, disp.cut, disp.digit);
-    }, options=list(paging=FALSE), rownames=NULL, selection="none")
+    }, extensions = 'Buttons', options = list(
+      paging = TRUE,
+      searching = TRUE,
+      fixedColumns = TRUE,
+      autoWidth = TRUE,
+      ordering = TRUE,
+      dom = 'tB',
+      buttons = c('copy', 'csv', 'excel')
+    ), rownames=NULL, selection="none")
 
 
     ##----download -----
